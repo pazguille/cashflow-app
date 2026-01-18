@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CASHFLOW</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="/src/assets/favicon.png" />
+
+    <!-- PWA / iOS Tags -->
+    <link rel="apple-touch-icon" href="src/assets/icon-512.png">
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Cashflow" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1536-2048.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1640-2360.jpg" media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1668-2224.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1620-2160.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1488-2266.jpg" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1320-2868.jpg" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1206-2622.jpg" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1290-2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1179-2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1170-2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1284-2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1125-2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1242-2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-828-1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1242-2208.jpg" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-750-1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+</head>
+<body>
+    <div class="app-grid">
+        <!-- Header Bento -->
+        <header class="bento-card header-bento">
+            <h1>Cashflow</h1>
+            <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
+                <button id="settingsBtn" class="btn-icon" aria-label="Settings"><i data-lucide="settings"></i></button>
+            </div>
+        </header>
+
+        <!-- Result Bento -->
+        <section class="bento-card result-bento hidden" id="resultsPanel">
+            <h2 style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; letter-spacing: 0.1em;">Interpretación IA</h2>
+            <div id="aiResponse">
+                <p style="opacity: 0.5; font-size: 0.9rem;">Esperando actividad...</p>
+            </div>
+            <div class="actions-bento">
+                <button id="confirmBtn" class="btn-neo btn-save" disabled>
+                    <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                    Guardar
+                </button>
+                <button id="rejectBtn" class="btn-neo btn-reject" disabled>
+                    <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                    Borrar
+                </button>
+            </div>
+        </section>
+
+        <!-- Input Bento -->
+        <section class="bento-card input-bento">
+            <div class="greeting-section">
+                <h2>Hola, Guille!</h2>
+                <p class="subtitle">¿En qué gastaste hoy?</p>
+            </div>
+
+            <!-- Voice Content -->
+            <div class="tab-content active" id="voice-tab">
+                <div class="voice-nexus">
+                    <div id="voiceStatus" class="subtitle" style="text-transform: uppercase;"></div>
+                    <button id="startVoiceBtn" class="btn-voice-main">
+                        <i data-lucide="mic" style="width: 40px; height: 40px;"></i>
+                    </button>
+                    <button id="stopVoiceBtn" class="hidden">
+                        <i data-lucide="square"></i>
+                    </button>
+                    <div id="voiceTranscript" style="font-size: 0.9rem; font-weight: 500; opacity: 0.7;"></div>
+                </div>
+            </div>
+
+            <!-- Text Content -->
+            <div class="tab-content" id="text-tab">
+                <textarea id="textInput" placeholder="Decime dónde y cuánto..."></textarea>
+                <button id="submitTextBtn" class="btn-neo">
+                    <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
+                    Enviar
+                </button>
+            </div>
+
+
+            <!-- Tabs -->
+            <div class="tabs-neo" role="tablist">
+                <button class="tab-btn active" data-tab="voice">Voz</button>
+                <button class="tab-btn" data-tab="text">Texto</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal Settings -->
+    <div id="settingsModal" class="modal-neo">
+        <div class="modal-content-neo">
+            <h2 style="margin-bottom: 24px;">Configuración</h2>
+            <form id="settingsForm">
+                <div class="form-field">
+                    <label>Google Client ID</label>
+                    <input type="text" id="googleClientId" required>
+                </div>
+                <div class="form-field">
+                    <label>Gemini API Key</label>
+                    <input type="text" id="apiKey" required>
+                </div>
+                <div class="form-field">
+                    <label>Spreadsheet ID</label>
+                    <input type="text" id="sheetId" required>
+                </div>
+                <div class="form-field">
+                    <label>Nombre de Hoja</label>
+                    <input type="text" id="sheetName" required>
+                </div>
+                <div style="margin-top: 32px;">
+                    <button type="submit" class="btn-neo">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast-neo"></div>
+    <div id="loadingSpinner" class="loading-orbit hidden"></div>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Core Scripts -->
+    <script src="src/js/config.js"></script>
+    <script src="src/js/auth.js"></script>
+    <script src="src/js/gemini.js"></script>
+    <script src="src/js/sheets.js"></script>
+    <script src="src/js/voice.js"></script>
+    <script src="src/js/app.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>

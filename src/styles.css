@@ -1,0 +1,404 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+    /* Color Palette - Neo Minimalist */
+    --bg-main: #fcfcfc;
+    --bg-card: #ffffff;
+    --text-main: #111111;
+    --text-muted: #666666;
+    --accent: #8F00FF; /* Electric Violet */
+    --accent-dark: #7000CC;
+    --border: #eeeeee;
+    --border-strong: #dddddd;
+
+    /* Shadow System */
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+    /* Spacing & Radius */
+    --radius-full: 100px;
+    --radius-bento: 24px;
+    --radius-inner: 16px;
+    --pad: 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-main);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(193, 255, 114, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(193, 255, 114, 0.05) 0px, transparent 50%);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    height: 100dvh; /* Use dynamic viewport height for mobile */
+    overflow: hidden;
+    padding: 0;
+}
+
+/* Typography */
+h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+h1 {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Bento Layout */
+.app-grid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.bento-card {
+    padding: 24px;
+    overflow: hidden;
+}
+
+
+/* Header Section */
+.header-bento {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Controls Section */
+.input-bento {
+    color: #000;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+    padding: 0;
+    border-radius: 0;
+}
+
+.greeting-section {
+    margin: 50px 16px;
+}
+
+.greeting-section h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 5px;
+    margin-top: 50px;
+}
+
+.greeting-section .subtitle {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.tab-content {
+    display: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 24px;
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+.tabs-neo {
+    display: flex;
+    background: rgba(0,0,0,0.05);
+    padding: 8px;
+    height: 60px;
+    min-height: 60px;
+    align-items: center;
+    border-radius: 40px;
+    margin: 15px;
+}
+
+.tab-btn {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: none;
+    padding: 10px;
+    border-radius: var(--radius-full);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tab-btn.active {
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Interface Details */
+textarea {
+    width: 100%;
+    height: 132px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: var(--radius-inner);
+    padding: 16px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 500;
+    resize: none;
+    outline: none;
+    margin-bottom: 28px;
+}
+
+/* Tab Contents */
+.tab-content {
+    display: none;
+}
+
+.btn-neo {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius-inner);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.2s;
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-neo:active { transform: scale(0.96); }
+
+/* Voice UI - Modern Spinner Circle */
+.voice-nexus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+}
+
+.btn-voice-main {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid #000;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes ripple {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+.recording .btn-voice-main {
+    background: #000;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.recording .btn-voice-main::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 4px solid #000;
+    border-radius: 50%;
+    animation: ripple 1.2s infinite ease-out;
+    z-index: -1;
+}
+
+
+
+/* Response Section - The Focus */
+.result-bento {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    width: calc(100% - 40px);
+    max-width: 460px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    background: var(--bg-card);
+}
+
+.result-bento:not(.hidden) {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+}
+
+.entry-neo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.entry-neo .amount {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.entry-neo .name {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
+.actions-bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-save { background: var(--accent); color: var(--bg-main); }
+.btn-reject { background: var(--bg-main); color: var(--accent); }
+
+/* Settings Button */
+.btn-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Modal */
+.modal-neo {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-neo.active { display: flex; }
+
+.modal-content-neo {
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    border-radius: var(--radius-bento) var(--radius-bento) 0 0;
+    padding: 32px;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.form-field { margin-bottom: 20px; }
+.form-field label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+.form-field input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border-strong);
+    font-family: inherit;
+    font-weight: 600;
+}
+
+/* Toasts */
+.toast-neo {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: #000;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 2000;
+    width: 85vw;
+}
+
+.toast-neo.show { transform: translateX(-50%) translateY(0); }
+.toast-neo.error { background: #ff4747; }
+
+/* Utilities */
+.hidden { display: none; }
+.loading-orbit {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-left: -20px;
+    border: 3px solid rgba(0,0,0,0.1);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: rotate 0.8s infinite linear;
+    z-index: 2100;
+}
+
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+/* Mobile optimization */
+@media (max-width: 400px) {
+    h1 { font-size: 2rem; }
+}
