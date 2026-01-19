@@ -42,6 +42,25 @@ class GoogleAuthManager {
 
     _handleCredentialResponse(response) {
         console.log('📝 ID Token recibido, solicitando Access Token vía redirección...');
+
+        // Extraer nombre del ID Token (JWT)
+        try {
+            const base64Url = response.credential.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64).split('').map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
+            );
+            const decoded = JSON.parse(jsonPayload);
+
+            if (decoded.given_name || decoded.name) {
+                const name = decoded.given_name || decoded.name.split(' ')[0];
+                localStorage.setItem('cashflow_user_name', name);
+                console.log(`👤 Usuario detectado: ${name}`);
+            }
+        } catch (e) {
+            console.warn('⚠️ No se pudo extraer el nombre del ID Token');
+        }
+
         this.requestAccessToken();
     }
 
@@ -84,6 +103,7 @@ class GoogleAuthManager {
 
         showToast(`✅ Autenticado correctamente`, 'success');
         updateAuthUI();
+        if (window.app) window.app._updateGreeting();
     }
 
     _parseHashToken() {
@@ -113,14 +133,42 @@ class GoogleAuthManager {
 
                 // Limpiar la URL para que no quede el token ahí
                 window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+
                 showToast(`✅ Autenticado correctamente`, 'success');
+
+                // Intentar obtener el nombre del usuario
+                this._fetchUserInfo(accessToken);
+
+                // Actualizar UI inmediatamente
+                setTimeout(() => {
+                    updateAuthUI();
+                    if (window.app) window.app._updateGreeting();
+                }, 100);
             }
         }
     }
 
+    async _fetchUserInfo(token) {
+        try {
+            const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+            if (data.given_name || data.name) {
+                const name = data.given_name || data.name.split(' ')[0];
+                localStorage.setItem('cashflow_user_name', name);
+                console.log(`👤 Usuario obtenido de userinfo: ${name}`);
+                if (window.app) window.app._updateGreeting();
+            }
+        } catch (e) {
+            console.warn('⚠️ No se pudo obtener info del usuario:', e);
+        }
+    }
+
+
     requestAccessToken() {
         console.log('🔄 Solicitando Access Token vía redirección...');
-        const scopes = 'https://www.googleapis.com/auth/spreadsheets';
+        const scopes = 'https://www.googleapis.com/auth/spreadsheets openid profile email';
         // Normalizar redirectUri para que sea el origen + /
         const redirectUri = window.location.origin;
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${this.CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scopes)}&prompt=consent`;
@@ -150,6 +198,7 @@ class GoogleAuthManager {
             localStorage.removeItem('cashflow_access_token');
             localStorage.removeItem('cashflow_token_expiry');
             localStorage.removeItem('cashflow_user_email');
+            localStorage.removeItem('cashflow_user_name');
 
             this.accessToken = null;
             this.tokenExpiry = null;

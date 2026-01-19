@@ -69,6 +69,7 @@ class VoiceRecorder {
         // Safari fix: Re-initialize on each start to avoid state issues
         this.recognition = new this.SpeechRecognition();
         this._setupRecognition();
+        this._startAnalyser(); // Iniciar analizador de audio real-time
 
         this.transcript = '';
         this.onComplete = onCompleteCallback;
@@ -78,11 +79,65 @@ class VoiceRecorder {
         } catch (e) {
             console.error('Error starting recognition:', e);
             showToast('Error al iniciar micrófono', 'error');
+            this._stopAnalyser();
         }
     }
 
     stop() {
-        this.recognition.stop();
+        if (this.recognition) this.recognition.stop();
+        this._stopAnalyser();
+    }
+
+    async _startAnalyser() {
+        try {
+            if (!this.audioContext) {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                this.analyser = this.audioContext.createAnalyser();
+                this.analyser.fftSize = 256;
+            }
+
+            if (this.audioContext.state === 'suspended') {
+                await this.audioContext.resume();
+            }
+
+            this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            this.source = this.audioContext.createMediaStreamSource(this.stream);
+            this.source.connect(this.analyser);
+
+            const bufferLength = this.analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            const update = () => {
+                if (!this.isRecording) return;
+
+                this.analyser.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    sum += dataArray[i];
+                }
+                const average = sum / bufferLength;
+
+                // Sensibilidad aumentada para que se note el cambio real-time
+                // Multiplicamos por 3.5 para que reaccione más a voces normales
+                const normalized = Math.min((average / 128) * 3.5, 1.2);
+
+                document.documentElement.style.setProperty('--voice-amplitude', normalized.toFixed(3));
+
+                this.analyserFrame = requestAnimationFrame(update);
+            };
+
+            update();
+        } catch (e) {
+            console.error('Error starting audio analyser:', e);
+        }
+    }
+
+    _stopAnalyser() {
+        if (this.analyserFrame) cancelAnimationFrame(this.analyserFrame);
+        if (this.stream) {
+            this.stream.getTracks().forEach(track => track.stop());
+        }
+        document.documentElement.style.setProperty('--voice-amplitude', '0');
     }
 
     getTranscript() {
@@ -94,11 +149,11 @@ class VoiceRecorder {
         const container = document.querySelector('.voice-nexus');
 
         if (state === 'recording') {
-            statusEl.textContent = 'ESCUCHANDO...';
+            statusEl.textContent = '';
             container.classList.add('recording');
             if (window.navigator.vibrate) window.navigator.vibrate(40);
         } else if (state === 'stopped' || state === 'error') {
-            statusEl.textContent = state === 'error' ? 'ERROR EN AUDIO' : 'HABLA AHORA';
+            statusEl.textContent = state === 'error' ? 'ERROR EN AUDIO' : '';
             container.classList.remove('recording');
             if (state === 'stopped' && window.navigator.vibrate) window.navigator.vibrate([20, 20]);
         }

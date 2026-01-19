@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
     <title>CASHFLOW</title>
     <link rel="stylesheet" href="src/styles.css">
     <link rel="manifest" href="manifest.json">
@@ -45,29 +46,28 @@
             </div>
         </header>
 
-        <!-- Result Bento -->
-        <section class="bento-card result-bento hidden" id="resultsPanel">
-            <h2 style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; letter-spacing: 0.1em;">Interpretación IA</h2>
-            <div id="aiResponse">
-                <p style="opacity: 0.5; font-size: 0.9rem;">Esperando actividad...</p>
-            </div>
-            <div class="actions-bento">
-                <button id="confirmBtn" class="btn-neo btn-save" disabled>
-                    <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                    Guardar
-                </button>
-                <button id="rejectBtn" class="btn-neo btn-reject" disabled>
-                    <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
-                    Borrar
-                </button>
-            </div>
-        </section>
 
         <!-- Input Bento -->
         <section class="bento-card input-bento">
             <div class="greeting-section">
-                <h2>Hola, Guille!</h2>
+                <h2 id="userGreeting">Hola!</h2>
                 <p class="subtitle">¿En qué gastaste hoy?</p>
+            </div>
+
+            <!-- Result Bento (Inline) -->
+            <div class="result-bento hidden" id="resultsPanel" style="flex: 1; padding: 0 16px; display: flex; flex-direction: column; justify-content: end;">
+                <h2 style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; letter-spacing: 0.1em;">Interpretación IA</h2>
+                <div id="aiResponse"></div>
+                <div class="actions-bento">
+                    <button id="confirmBtn" class="btn-neo btn-save" disabled>
+                        <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                        Guardar
+                    </button>
+                    <button id="rejectBtn" class="btn-neo btn-reject" disabled>
+                        <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                        Borrar
+                    </button>
+                </div>
             </div>
 
             <!-- Voice Content -->
@@ -75,7 +75,12 @@
                 <div class="voice-nexus">
                     <div id="voiceStatus" class="subtitle" style="text-transform: uppercase;"></div>
                     <button id="startVoiceBtn" class="btn-voice-main">
-                        <i data-lucide="mic" style="width: 40px; height: 40px;"></i>
+                        <div class="blob-container">
+                            <div class="blob"></div>
+                            <div class="blob"></div>
+                            <div class="blob"></div>
+                        </div>
+                        <i data-lucide="mic" style="width: 40px; height: 40px; z-index: 10;"></i>
                     </button>
                     <button id="stopVoiceBtn" class="hidden">
                         <i data-lucide="square"></i>
@@ -88,7 +93,6 @@
             <div class="tab-content" id="text-tab">
                 <textarea id="textInput" placeholder="Decime dónde y cuánto..."></textarea>
                 <button id="submitTextBtn" class="btn-neo">
-                    <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
                     Enviar
                 </button>
             </div>
@@ -137,6 +141,17 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Core Scripts -->
+    <!-- SVG Filter for Gooey Effect -->
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display: none;">
+        <defs>
+            <filter id="liquid-glass">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
     <script src="src/js/config.js"></script>
     <script src="src/js/auth.js"></script>
     <script src="src/js/gemini.js"></script>

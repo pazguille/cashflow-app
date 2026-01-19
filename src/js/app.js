@@ -9,6 +9,7 @@ class CashFlowApp {
     init() {
         this._setupEventListeners();
         this._checkConfiguration();
+        this._updateGreeting();
 
         // Initialize Lucide icons
         if (window.lucide) {
@@ -78,11 +79,17 @@ class CashFlowApp {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
         });
 
+        // Hide results if they were visible
+        this._clearAIResponse();
+
         // Update tab content
         document.querySelectorAll('.tab-content').forEach(content => {
             content.classList.remove('active');
+            content.classList.add('hidden');
         });
-        document.getElementById(`${tabName}-tab`).classList.add('active');
+        const targetTab = document.getElementById(`${tabName}-tab`);
+        targetTab.classList.add('active');
+        targetTab.classList.remove('hidden');
 
         // Limpiar estado previo
         this.currentParsedData = null;
@@ -116,6 +123,11 @@ class CashFlowApp {
     }
 
     _handleVoiceStart() {
+        if (voiceRecorder.isRecording) {
+            voiceRecorder.stop();
+            return;
+        }
+
         voiceRecorder.start((transcript) => {
             // Este callback se ejecuta cuando se detecta el final del habla
             document.getElementById('textInput').value = transcript;
@@ -162,15 +174,16 @@ class CashFlowApp {
         html += '</div>';
 
         if (data.summary) {
-            html += `<p style="font-size: 0.8rem; opacity: 0.6; margin-top: 16px; font-weight: 500;">${data.summary}</p>`;
+            html += `<p style="font-size: 0.8rem; opacity: 0.6; font-weight: 500;">${data.summary}</p>`;
         }
 
         responseEl.innerHTML = html;
         confirmBtn.disabled = false;
         rejectBtn.disabled = false;
 
-        // Show results panel
+        // Show results panel and hide inputs
         document.getElementById('resultsPanel').classList.remove('hidden');
+        document.querySelector('.tab-content.active').classList.add('hidden');
 
         // Initialize newly added icons
         if (window.lucide) {
@@ -188,8 +201,15 @@ class CashFlowApp {
         document.getElementById('confirmBtn').disabled = true;
         document.getElementById('rejectBtn').disabled = true;
 
-        // Hide results panel
+        // Hide results panel and show active tab
         document.getElementById('resultsPanel').classList.add('hidden');
+        const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+        document.getElementById(`${activeTab}-tab`).classList.remove('hidden');
+
+        // Reset inputs
+        document.getElementById('textInput').value = '';
+        const voiceTranscriptEl = document.getElementById('voiceTranscript');
+        if (voiceTranscriptEl) voiceTranscriptEl.textContent = '';
     }
 
     async _confirmAndSave() {
@@ -258,6 +278,14 @@ class CashFlowApp {
     _checkConfiguration() {
         if (!config.isConfigured()) {
             showToast('⚙️ Por favor configura tu API Key en Configuración', 'warning');
+        }
+    }
+
+    _updateGreeting() {
+        const name = localStorage.getItem('cashflow_user_name') || '¡Hola!';
+        const greetingEl = document.getElementById('userGreeting');
+        if (greetingEl) {
+            greetingEl.textContent = name === '¡Hola!' ? '¡Hola!' : `¡Hola, ${name}!`;
         }
     }
 
