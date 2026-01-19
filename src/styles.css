@@ -1,12 +1,10 @@
 :root {
-    /* Color Palette - Neo Minimalist */
+    /* Color Palette */
     --bg-main: #fcfcfc;
     --bg-card: #ffffff;
     --text-main: #111111;
     --text-muted: #666666;
-    --accent: #8F00FF; /* Electric Violet */
-    --accent-glow: rgba(143, 0, 255, 0.15);
-    --accent-warm: #FF007A; /* Vivid Pink for warmth */
+    --accent: #111111;
     --border: #eeeeee;
     --border-strong: #dddddd;
 
@@ -397,7 +395,6 @@ textarea {
     justify-content: space-between;
     align-items: flex-end;
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 12px;
 }
 
 .entry-neo .amount {
