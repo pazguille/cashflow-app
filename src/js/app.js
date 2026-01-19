@@ -82,8 +82,6 @@ class CashFlowApp {
         // Voice Input
         document.getElementById('startVoiceBtn').addEventListener('click', () => this._handleVoiceStart());
         document.getElementById('voiceOrb').addEventListener('click', () => this._handleVoiceStart());
-        document.getElementById('stopVoiceBtn').addEventListener('click', () => this._handleVoiceStop());
-
 
         // Settings
         document.getElementById('settingsBtn').addEventListener('click', () => this._openSettings());
@@ -243,8 +241,6 @@ class CashFlowApp {
 
         // Reset inputs
         document.getElementById('textInput').value = '';
-        const voiceTranscriptEl = document.getElementById('voiceTranscript');
-        if (voiceTranscriptEl) voiceTranscriptEl.textContent = '';
     }
 
     async _confirmAndSave() {

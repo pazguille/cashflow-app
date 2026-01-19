@@ -290,8 +290,7 @@ textarea {
     pointer-events: none;
 }
 
-.btn-neo.loading,
-.btn-voice-main.loading {
+.btn-neo.loading {
     pointer-events: none;
     opacity: 0.8;
     position: relative;

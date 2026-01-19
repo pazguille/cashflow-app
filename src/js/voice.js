@@ -43,7 +43,6 @@ export class VoiceRecorder {
                 }
             }
             this.transcript = final;
-            this._updateTranscript(final + interim);
         };
 
         this.recognition.onerror = (event) => {
@@ -147,14 +146,12 @@ export class VoiceRecorder {
     }
 
     _updateUI(state) {
-        const statusEl = document.getElementById('voiceStatus');
         const container = document.querySelector('.voice-nexus');
         const startBtn = document.getElementById('startVoiceBtn');
         const orb = document.getElementById('voiceOrb');
         const orbVideo = orb ? orb.querySelector('video') : null;
 
         if (state === 'recording') {
-            statusEl.textContent = '';
             container.classList.add('recording');
 
             // Toggle visibility
@@ -164,7 +161,6 @@ export class VoiceRecorder {
 
             if (window.navigator.vibrate) window.navigator.vibrate(40);
         } else if (state === 'stopped' || state === 'error') {
-            statusEl.textContent = state === 'error' ? 'ERROR EN AUDIO' : '';
             container.classList.remove('recording');
 
             // Toggle visibility back
@@ -177,11 +173,6 @@ export class VoiceRecorder {
 
             if (state === 'stopped' && window.navigator.vibrate) window.navigator.vibrate([20, 20]);
         }
-    }
-
-    _updateTranscript(text) {
-        const transcriptEl = document.getElementById('voiceTranscript');
-        transcriptEl.textContent = text;
     }
 }
 

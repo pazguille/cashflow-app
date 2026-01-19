@@ -113,23 +113,18 @@
             <!-- Voice Content -->
             <div class="tab-content active" id="voice-tab">
                 <div class="voice-nexus">
-                    <div id="voiceStatus" class="subtitle" style="text-transform: uppercase;"></div>
-                        <div id="voiceOrb" class="voiceOrb-container">
-                            <video class="voiceOrb-video" src="src/assets/orbe.mp4" preload="metadata" muted loop playsinline></video>
+                    <button id="startVoiceBtn" class="btn-voice-main">
+                        <div class="blob-container">
+                            <div class="blob"></div>
+                            <div class="blob"></div>
+                            <div class="blob"></div>
                         </div>
-                        <button id="startVoiceBtn" class="btn-voice-main">
-                            <div class="blob-container">
-                                <div class="blob"></div>
-                                <div class="blob"></div>
-                                <div class="blob"></div>
-                            </div>
-                            <i data-lucide="mic" style="width: 28px; height: 28px; z-index: 10;"></i>
-                            <div class="btn-spinner"></div>
-                        </button>
-                    <button id="stopVoiceBtn" class="hidden">
-                        <i data-lucide="square"></i>
+                        <i data-lucide="mic" style="width: 28px; height: 28px; z-index: 10;"></i>
+                        <div class="btn-spinner show"></div>
                     </button>
-                    <div id="voiceTranscript" style="font-size: 0.9rem; font-weight: 500; opacity: 0.7;"></div>
+                    <div id="voiceOrb" class="voiceOrb-container hidden">
+                        <video class="voiceOrb-video" src="src/assets/orbe.mp4" preload="metadata" muted loop playsinline></video>
+                    </div>
                 </div>
             </div>
 
