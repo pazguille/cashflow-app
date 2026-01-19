@@ -138,7 +138,6 @@ class CashFlowApp {
         const text = textArea.value.trim();
 
         if (!text) {
-            showToast('Por favor ingresá algo de texto', 'warning');
             return;
         }
 
@@ -170,7 +169,6 @@ class CashFlowApp {
             // Este callback se ejecuta cuando se detecta el final del habla
             document.getElementById('textInput').value = transcript;
             this._handleTextInput();
-            showToast('🎤 Procesando voz automáticamente...', 'info');
         });
     }
 
@@ -278,7 +276,6 @@ class CashFlowApp {
     _rejectData() {
         this.currentParsedData = null;
         this._clearAIResponse();
-        showToast('Datos rechazados', 'info');
     }
 
     _openSettings() {
@@ -305,7 +302,6 @@ class CashFlowApp {
         config.save();
 
         document.getElementById('settingsModal').classList.remove('active');
-        showToast('✅ Configuración guardada', 'success');
 
         // Reload page to apply changes in ESM structure easily
         setTimeout(() => window.location.reload(), 500);
@@ -313,7 +309,7 @@ class CashFlowApp {
 
     _checkConfiguration() {
         if (!config.isConfigured()) {
-            showToast('⚙️ Por favor configura tu API Key en Configuración', 'warning');
+            console.warn('⚠️ Configuración incompleta');
         }
     }
 

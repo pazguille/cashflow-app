@@ -252,7 +252,8 @@ textarea {
     -webkit-tap-highlight-color: transparent;
 }
 
-.btn-neo.loading {
+.btn-neo.loading,
+.btn-voice-main.loading {
     pointer-events: none;
     opacity: 0.8;
     position: relative;
@@ -292,7 +293,8 @@ textarea {
     border-radius: 50%;
 }
 
-.btn-neo.loading .btn-spinner {
+.btn-neo.loading .btn-spinner,
+.btn-voice-main.loading .btn-spinner {
     opacity: 1;
     animation: rotateBtn 0.8s infinite linear;
 }
@@ -314,7 +316,8 @@ textarea {
     transition: all 0.4s ease;
 }
 
-.recording .btn-voice-main [data-lucide="mic"] {
+.recording .btn-voice-main [data-lucide="mic"],
+.btn-voice-main.loading [data-lucide="mic"] {
     opacity: 0;
     transform: scale(0.5);
     pointer-events: none;
