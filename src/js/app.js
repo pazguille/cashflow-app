@@ -244,6 +244,7 @@ class CashFlowApp {
         config.apiKey = apiKey;
         config.sheetId = sheetId;
         config.sheetName = sheetName;
+        config.lang = document.getElementById('appLang')?.value || 'es-AR';
         config.save();
 
         // Reset processors para usar nueva API key

@@ -1,26 +1,25 @@
 // Web Speech API Integration
 class VoiceRecorder {
     constructor() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        this.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        if (!SpeechRecognition) {
+        if (!this.SpeechRecognition) {
             console.error('Web Speech API no soportada');
             this.supported = false;
             return;
         }
 
-        this.recognition = new SpeechRecognition();
         this.supported = true;
         this.isRecording = false;
         this.transcript = '';
-
-        this._setupRecognition();
+        this.recognition = null;
+        this.lang = 'es-AR'; // Default to Argentine Spanish
     }
 
     _setupRecognition() {
         this.recognition.continuous = false; // Auto-stop cuando el usuario deja de hablar
         this.recognition.interimResults = true;
-        this.recognition.lang = 'es-AR'; // Spanish Argentine
+        this.recognition.lang = config.lang || 'es-AR';
 
         this.onComplete = null; // Callback para cuando termina
 
@@ -66,9 +65,20 @@ class VoiceRecorder {
             showToast('Web Speech API no está soportada en tu navegador', 'error');
             return;
         }
+
+        // Safari fix: Re-initialize on each start to avoid state issues
+        this.recognition = new this.SpeechRecognition();
+        this._setupRecognition();
+
         this.transcript = '';
         this.onComplete = onCompleteCallback;
-        this.recognition.start();
+
+        try {
+            this.recognition.start();
+        } catch (e) {
+            console.error('Error starting recognition:', e);
+            showToast('Error al iniciar micrófono', 'error');
+        }
     }
 
     stop() {

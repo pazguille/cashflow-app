@@ -17,6 +17,7 @@ class Config {
             const data = JSON.parse(stored);
             this.sheetId = data.sheetId || '';
             this.sheetName = data.sheetName || 'Cashflow';
+            this.lang = data.lang || 'es-AR';
             this.googleClientId = data.googleClientId || '';
             this.apiKey = data.apiKey || '';
         }
@@ -27,7 +28,8 @@ class Config {
             apiKey: this.apiKey,
             sheetId: this.sheetId,
             sheetName: this.sheetName,
-            googleClientId: this.googleClientId
+            googleClientId: this.googleClientId,
+            lang: this.lang
         };
         localStorage.setItem(this.storageKey, JSON.stringify(data));
     }
