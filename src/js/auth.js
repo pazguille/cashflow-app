@@ -162,7 +162,7 @@ export class GoogleAuthManager {
             this.tokenClient.requestAccessToken({ prompt: '' });
         } else {
             // Redirect Flow (Implicit Flow manual)
-            const rootUrl = window.location.origin + window.location.pathname;
+            const rootUrl = window.location.origin;
             const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
                 `client_id=${this.CLIENT_ID}&` +
                 `redirect_uri=${rootUrl}&` +
