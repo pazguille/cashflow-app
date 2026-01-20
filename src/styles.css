@@ -280,6 +280,7 @@ textarea {
     cursor: pointer;
     border: 2px solid #fff;
     box-shadow: var(--shadow-md);
+    pointer-events: none;
 }
 
 .voiceOrb-video {
@@ -550,7 +551,7 @@ textarea {
     h1 { font-size: 2rem; }
 }
 
-.water-round-container {
+/* .water-round-container {
     width: 100px;
     height: 100px;
     animation: water-waves linear infinite;
@@ -613,4 +614,4 @@ textarea {
     100% {
         transform: rotate(360deg);
     }
-}
+} */

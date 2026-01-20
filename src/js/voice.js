@@ -7,7 +7,7 @@ export class VoiceRecorder {
         this.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
         if (!this.SpeechRecognition) {
-            console.error('Web Speech API no soportada');
+            showToast('Web Speech API no soportada', 'error');
             this.supported = false;
             return;
         }
@@ -28,7 +28,6 @@ export class VoiceRecorder {
 
         this.recognition.onstart = () => {
             this.isRecording = true;
-            this._updateUI('recording');
         };
 
         this.recognition.onresult = (event) => {
@@ -76,9 +75,9 @@ export class VoiceRecorder {
         this.onComplete = onCompleteCallback;
 
         try {
+            this._updateUI('recording');
             this.recognition.start();
         } catch (e) {
-            console.error('Error starting recognition:', e);
             showToast('Error al iniciar micrófono', 'error');
             this._stopAnalyser();
         }
@@ -147,7 +146,7 @@ export class VoiceRecorder {
 
     _updateUI(state) {
         const container = document.querySelector('.voice-nexus');
-        const startBtn = document.getElementById('startVoiceBtn');
+        // const startBtn = document.getElementById('startVoiceBtn');
 
         if (state === 'recording') {
             container.classList.add('recording');
