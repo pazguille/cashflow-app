@@ -549,3 +549,68 @@ textarea {
 @media (max-width: 400px) {
     h1 { font-size: 2rem; }
 }
+
+.water-round-container {
+    width: 100px;
+    height: 100px;
+    animation: water-waves linear infinite;
+    pointer-events: none;
+    position: absolute;
+    background: #fff;
+    z-index: 12;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.47, 0, 0.75, 0.72);
+    will-change: opacity;
+}
+
+.recording .water-round-container {
+    opacity: 1;
+}
+
+.water-wave1 {
+    position: absolute;
+    top: 40%;
+    left: -25%;
+    background: #ff9933;
+    opacity: 0.5;
+    width: 200%;
+    height: 200%;
+    border-radius: 40%;
+    animation: inherit;
+    animation-duration: 5s;
+}
+
+.water-wave2 {
+    position: absolute;
+    top: 45%;
+    left: -35%;
+    background: #febe0e;;
+    opacity: 0.3;
+    width: 200%;
+    height: 200%;
+    border-radius: 35%;
+    animation: inherit;
+    animation-duration: 7s;
+}
+
+.water-wave3 {
+    position: absolute;
+    top: 50%;
+    left: -35%;
+    background: #e46b0f;
+    opacity: 0.2;
+    width: 200%;
+    height: 200%;
+    border-radius: 33%;
+    animation: inherit;
+    animation-duration: 11s;
+}
+
+@keyframes water-waves {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

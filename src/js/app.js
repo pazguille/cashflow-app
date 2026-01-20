@@ -81,7 +81,7 @@ class CashFlowApp {
 
         // Voice Input
         document.getElementById('startVoiceBtn').addEventListener('click', () => this._handleVoiceStart());
-        document.getElementById('voiceOrb').addEventListener('click', () => this._handleVoiceStart());
+        // document.getElementById('voiceOrb').addEventListener('click', () => this._handleVoiceStart());
 
         // Settings
         document.getElementById('settingsBtn').addEventListener('click', () => this._openSettings());

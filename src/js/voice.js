@@ -151,13 +151,13 @@ export class VoiceRecorder {
 
         if (state === 'recording') {
             container.classList.add('recording');
-            startBtn.classList.add('hidden');
+            // startBtn.classList.add('hidden');
 
         } else if (state === 'stopped' || state === 'error') {
             container.classList.remove('recording');
 
             // Toggle visibility back
-            startBtn.classList.remove('hidden');
+            // startBtn.classList.remove('hidden');
         }
     }
 }
