@@ -20,66 +20,90 @@ export class GoogleSheetsManager {
                 throw new Error('No se pudieron leer los datos del sheet');
             }
 
-            const entry = entries[0];
-            let targetRange = '';
-            let targetValues = [[entry.name, entry.amount]];
-            let foundInFijos = false;
+            const batchData = [];
+            const savedItems = [];
 
             // RANGOS DEFINIDOS POR EL USUARIO: Filas 20 a 54
-            // Nota: En arrays de JS (0-indexed), fila 20 es index 19, fila 54 es index 53.
             const MIN_ROW = 20;
             const MAX_ROW = 54;
 
-            // --- INTENTO 1: SECTION "FIJOS" (Columna G, I) ---
-            // Buscamos espacio entre fila 20 y 54
-            for (let i = MIN_ROW - 1; i < MAX_ROW; i++) {
-                // Columna G es index 6
-                const rowData = values[i] || [];
-                if (!rowData[6] || rowData[6].trim() === '') {
-                    // Encontré fila vacía en Fijos (Columna G)
-                    const rowNumber = i + 1;
-                    const concepto = entry.name;
-                    const importe = entry.amount;
-                    const colH = rowData[7] || ''; // Mantener columna H intacta
+            // Iterar sobre cada entrada para encontrarle lugar
+            for (const entry of entries) {
+                let foundInFijos = false;
+                let targetRange = '';
+                let targetValues = null;
+                let rowIndex = -1;
 
-                    targetRange = `${sheetName}!G${rowNumber}:I${rowNumber}`;
-                    targetValues = [[concepto, colH, importe]];
-                    foundInFijos = true;
-                    break;
-                }
-            }
-
-            // --- INTENTO 2: SECTION "GASTOS EXTRA" (Columna K, L) (FALLBACK) ---
-            if (!foundInFijos) {
-                let extraTargetRow = -1;
+                // --- INTENTO 1: SECTION "FIJOS" (Columna G, I) ---
                 for (let i = MIN_ROW - 1; i < MAX_ROW; i++) {
-                    // Columna K es index 10
                     const rowData = values[i] || [];
-                    if (!rowData[10] || rowData[10].trim() === '') {
-                        extraTargetRow = i;
+                    // Verificar si la celda está vacía en local values
+                    if (!rowData[6] || rowData[6].trim() === '') {
+                        rowIndex = i;
+                        const rowNumber = i + 1;
+                        const concepto = entry.name;
+                        const importe = entry.amount;
+                        const colH = rowData[7] || ''; // Mantener columna H intacta
+
+                        targetRange = `${sheetName}!G${rowNumber}:I${rowNumber}`;
+                        targetValues = [[concepto, colH, importe]];
+                        foundInFijos = true;
+
+                        // ACTUALIZAR local values para que la siguiente iteración sepa que esta fila está ocupada
+                        if (!values[i]) values[i] = [];
+                        values[i][6] = concepto; // Marcar como ocupado
+                        values[i][8] = importe;
                         break;
                     }
                 }
 
-                if (extraTargetRow === -1) {
-                    throw new Error('⚠️ Ambas secciones (Fijos y Gastos Extra) están llenas hasta la fila 54.');
+                // --- INTENTO 2: SECTION "GASTOS EXTRA" (Columna K, L) (FALLBACK) ---
+                if (!foundInFijos) {
+                    for (let i = MIN_ROW - 1; i < MAX_ROW; i++) {
+                        const rowData = values[i] || [];
+                        if (!rowData[10] || rowData[10].trim() === '') {
+                            rowIndex = i;
+                            const rowNumber = i + 1;
+                            targetRange = `${sheetName}!K${rowNumber}:L${rowNumber}`;
+                            targetValues = [[entry.name, entry.amount]];
+
+                            // ACTUALIZAR local values
+                            if (!values[i]) values[i] = [];
+                            values[i][10] = entry.name; // Marcar ocupado
+                            values[i][11] = entry.amount;
+                            break;
+                        }
+                    }
                 }
 
-                const rowNumber = extraTargetRow + 1;
-                targetRange = `${sheetName}!K${rowNumber}:L${rowNumber}`;
-                targetValues = [[entry.name, entry.amount]];
+                if (targetRange && targetValues) {
+                    batchData.push({
+                        range: targetRange,
+                        values: targetValues
+                    });
+                    savedItems.push(entry.name);
+                } else {
+                    console.warn(`⚠️ No se encontró espacio para: ${entry.name}`);
+                }
             }
 
-            // --- EJECUTAR UPDATE ---
-            const url = `${this.baseUrl}/${sheetId}/values/${targetRange}?valueInputOption=USER_ENTERED`;
+            if (batchData.length === 0) {
+                throw new Error('No se encontró espacio disponible para ningún gasto.');
+            }
+
+            // --- EJECUTAR BATCH UPDATE ---
+            const url = `${this.baseUrl}/${sheetId}/values:batchUpdate`;
 
             const response = await fetch(url, {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.accessToken}`
                 },
-                body: JSON.stringify({ values: targetValues })
+                body: JSON.stringify({
+                    valueInputOption: 'USER_ENTERED',
+                    data: batchData
+                })
             });
 
             if (!response.ok) {
@@ -88,8 +112,12 @@ export class GoogleSheetsManager {
             }
 
             showSpinner(false);
-            const section = foundInFijos ? 'Fijos' : 'Gastos Extra';
-            showToast(`✅ Guardado en ${section}: ${entry.name}`, 'success');
+            if (savedItems.length === 1) {
+                showToast(`✅ Guardado: ${savedItems[0]}`, 'success');
+            } else {
+                showToast(`✅ ${savedItems.length} gastos guardados exitosamente`, 'success');
+            }
+
             return await response.json();
 
         } catch (error) {
