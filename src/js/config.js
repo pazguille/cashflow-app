@@ -1,13 +1,13 @@
 // Configuration Manager
 class Config {
     constructor() {
-        this.storageKey = 'cashflow_config';
+        this.storageKey = 'mangos_config';
         this.load();
     }
 
     load() {
         this.sheetId = '';
-        this.sheetName = 'Cashflow';
+        this.sheetName = '';
         this.googleClientId = '';
         this.apiKey = '';
 
@@ -16,7 +16,7 @@ class Config {
         if (stored) {
             const data = JSON.parse(stored);
             this.sheetId = data.sheetId || '';
-            this.sheetName = data.sheetName || 'Cashflow';
+            this.sheetName = data.sheetName || '';
             this.lang = data.lang || 'es-AR';
             this.googleClientId = data.googleClientId || '';
             this.apiKey = data.apiKey || '';

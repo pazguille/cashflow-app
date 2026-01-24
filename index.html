@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
-    <title>CASHFLOW</title>
+    <title>Mangos</title>
     <link rel="stylesheet" href="src/styles.css">
     <link rel="manifest" href="manifest.json">
     <link rel="shortcut icon" href="/src/assets/favicon.png" />
@@ -12,12 +12,13 @@
     <!-- Performance Optimization: Preloads -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://unpkg.com/lucide@0.562.0/dist/umd/lucide.min.js" as="script">
+    <!-- <link rel="preload" href="https://unpkg.com/lucide@0.562.0/dist/umd/lucide.min.js" as="script"> -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600&display=swap" as="style">
     <link rel="modulepreload" href="./src/js/app.js">
     <link rel="modulepreload" href="./src/js/config.js">
     <link rel="modulepreload" href="./src/js/auth.js">
     <link rel="modulepreload" href="./src/js/utils.js">
+    <link rel="modulepreload" href="./src/js/pull-to-refresh.js">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -26,7 +27,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-touch-fullscreen" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Cashflow" />
+    <meta name="apple-mobile-web-app-title" content="Mangos" />
     <meta name="theme-color" content="#FFFFFF" />
     <link rel="apple-touch-startup-image" media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="src/assets/iPhone_17_Pro_Max__iPhone_16_Pro_Max_landscape.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" href="src/assets/iPhone_17_Pro__iPhone_17__iPhone_16_Pro_landscape.png">
@@ -76,10 +77,18 @@
 <body>
     <main class="app-grid">
         <!-- Header Bento -->
-        <header class="bento-card header-bento">
-            <h1>Cashflow</h1>
+        <header class="header-bento">
+            <!-- Pull-to-Refresh Indicator -->
+            <div id="pullToRefreshIndicator" class="ptr-indicator">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-down" class="lucide lucide-arrow-down ptr-arrow ptr-arrow-down"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-up" class="lucide lucide-arrow-up ptr-arrow ptr-arrow-up hidden"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>
+            </div>
+
+            <h1>Mangos</h1>
             <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
-                <button id="settingsBtn" class="btn-icon" aria-label="Settings"><i data-lucide="settings"></i></button>
+                <button id="settingsBtn" class="btn-icon" aria-label="Settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="settings" class="lucide lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
             </div>
         </header>
 
@@ -88,67 +97,56 @@
         <section class="bento-card input-bento">
             <div class="greeting-section">
                 <h2 id="userGreeting">Hola!</h2>
-                <p class="subtitle">¿En qué gastaste hoy?</p>
+                <p class="subtitle">¿Cuántos gastaste hoy?</p>
             </div>
 
-            <!-- Result Bento (Inline) -->
-            <section class="result-bento hidden" id="resultsPanel" style="flex: 1; padding: 0 16px; display: flex; flex-direction: column; justify-content: end;">
-                <h2 style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; letter-spacing: 0.1em;">Gastos</h2>
-                <div id="aiResponse"></div>
-                <div class="actions-bento">
-                    <button id="confirmBtn" class="btn-neo btn-save" disabled>
-                        <span class="btn-text">
-                            <i data-lucide="check" style="width: 18px; height: 18px;"></i>
-                            Guardar
-                        </span>
-                        <div class="btn-spinner"></div>
-                    </button>
-                    <button id="rejectBtn" class="btn-neo btn-reject" disabled>
-                        <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
-                        Borrar
-                    </button>
-                </div>
-            </section>
-
-            <!-- Voice Content -->
-            <div class="tab-content active" id="voice-tab">
+            <!-- Unified Input Interface -->
+            <div class="unified-input-container">
+                <!-- Voice/Tap Button -->
                 <div class="voice-nexus">
-                    <button id="startVoiceBtn" class="btn-voice-main">
+                    <button id="unifiedInputBtn" class="btn-voice-main" aria-label="Tap para texto, mantén presionado para voz">
                         <div class="blob-container">
                             <div class="blob"></div>
                             <div class="blob"></div>
                             <div class="blob"></div>
                         </div>
-                        <i data-lucide="mic" style="width: 28px; height: 28px; z-index: 10;"></i>
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="mic" style="width: 28px; height: 28px; z-index: 10;" class="lucide lucide-mic"><path d="M12 19v3"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><rect x="9" y="2" width="6" height="13" rx="3"></rect></svg> -->
                         <div class="btn-spinner show"></div>
-                        <!-- <div class="water-round-container">
-                            <div class="water-wave1"></div>
-                            <div class="water-wave2"></div>
-                            <div class="water-wave3"></div>
-                        </div> -->
                     </button>
                     <div id="voiceOrb" class="voiceOrb-container">
                         <video class="voiceOrb-video" src="src/assets/orbe.mp4" preload="metadata" autoplay muted loop playsinline></video>
                     </div>
                 </div>
+
+                <!-- Text Input (hidden by default) -->
+                <div class="text-input-section hidden" id="textInputSection">
+                    <label for="textInput" class="hidden">Ingresar gasto</label>
+                    <textarea id="textInput" placeholder="Decime cuánto y dónde..."></textarea>
+                    <button id="submitTextBtn" class="btn-neo">
+                        <span class="btn-text">Enviar</span>
+                        <div class="btn-spinner"></div>
+                    </button>
+                </div>
+
+                <!-- Result Bento (Inline) -->
+                <section class="result-bento hidden" id="resultsPanel" style="flex: 1; display: flex; flex-direction: column; justify-content: end;">
+                    <h2 style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; letter-spacing: 0.1em;">Gastos</h2>
+                    <div id="aiResponse"></div>
+                    <div class="actions-bento">
+                        <button id="confirmBtn" class="btn-neo btn-save" disabled>
+                            <span class="btn-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" style="width: 18px; height: 18px;" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"></path></svg>
+                                Guardar
+                            </span>
+                            <div class="btn-spinner"></div>
+                        </button>
+                        <button id="rejectBtn" class="btn-neo btn-reject" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trash-2" style="width: 18px; height: 18px;" class="lucide lucide-trash-2"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            Borrar
+                        </button>
+                    </div>
+                </section>
             </div>
-
-            <!-- Text Content -->
-            <div class="tab-content" id="text-tab">
-                <label for="textInput" class="hidden">Ingresar gasto</label>
-                <textarea id="textInput" placeholder="Decime cuánto y dónde..."></textarea>
-                <button id="submitTextBtn" class="btn-neo">
-                    <span class="btn-text">Enviar</span>
-                    <div class="btn-spinner"></div>
-                </button>
-            </div>
-
-
-            <!-- Tabs -->
-            <nav class="tabs-neo" role="tablist">
-                <button class="tab-btn active" data-tab="voice" role="tab" aria-selected="true">Voz</button>
-                <button class="tab-btn" data-tab="text" role="tab" aria-selected="false">Texto</button>
-            </nav>
         </section>
     </main>
 
@@ -186,7 +184,7 @@
     <div id="toast" class="toast-neo"></div>
 
     <!-- Icons -->
-    <script src="https://unpkg.com/lucide@0.562.0/dist/umd/lucide.min.js"></script>
+    <!-- <script src="https://unpkg.com/lucide@0.562.0/dist/umd/lucide.min.js"></script> -->
 
     <!-- Core Scripts -->
     <!-- SVG Filter for Gooey Effect -->

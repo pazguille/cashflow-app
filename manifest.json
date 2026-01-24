@@ -1,7 +1,7 @@
 {
-  "id": "cashflow",
-  "name": "Cashflow",
-  "short_name": "Cashflow",
+  "id": "mangos",
+  "name": "Mangos",
+  "short_name": "Mangos",
   "description": "Tu asistente financiero inteligente y minimalista.",
   "start_url": "index.html",
   "display": "standalone",

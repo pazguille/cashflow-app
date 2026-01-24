@@ -6,8 +6,8 @@ export class GoogleAuthManager {
 // ... (rest of the class remains the same)
     constructor() {
         this.CLIENT_ID = config.googleClientId;
-        this.accessToken = localStorage.getItem('cashflow_access_token');
-        this.tokenExpiry = localStorage.getItem('cashflow_token_expiry');
+        this.accessToken = localStorage.getItem('mangos_access_token');
+        this.tokenExpiry = localStorage.getItem('mangos_token_expiry');
         this.isInitialized = false;
         this.tokenClient = null;
     }
@@ -61,12 +61,12 @@ export class GoogleAuthManager {
             console.log('🏷️ Token encontrado en URL (Redirect Flow)');
 
             this.accessToken = accessToken;
-            localStorage.setItem('cashflow_access_token', this.accessToken);
+            localStorage.setItem('mangos_access_token', this.accessToken);
 
             const expiry = new Date();
             expiry.setSeconds(expiry.getSeconds() + (parseInt(expiresIn) || 3600));
             this.tokenExpiry = expiry.toISOString();
-            localStorage.setItem('cashflow_token_expiry', this.tokenExpiry);
+            localStorage.setItem('mangos_token_expiry', this.tokenExpiry);
 
             // Clean URL
             history.replaceState(null, null, window.location.pathname);
@@ -91,19 +91,19 @@ export class GoogleAuthManager {
 
         // Guardar access token
         this.accessToken = response.access_token;
-        localStorage.setItem('cashflow_access_token', this.accessToken);
+        localStorage.setItem('mangos_access_token', this.accessToken);
 
         // Calcular expiry (típicamente 3600 segundos = 1 hora)
         const expiry = new Date();
         const expiresIn = response.expires_in || 3600;
         expiry.setSeconds(expiry.getSeconds() + expiresIn);
         this.tokenExpiry = expiry.toISOString();
-        localStorage.setItem('cashflow_token_expiry', this.tokenExpiry);
+        localStorage.setItem('mangos_token_expiry', this.tokenExpiry);
 
         console.log(`✅ Token actualizado. Expira en: ${this.tokenExpiry}`);
 
         // Intentar obtener info del usuario si no la tenemos
-        if (!localStorage.getItem('cashflow_user_name')) {
+        if (!localStorage.getItem('mangos_user_name')) {
             this._fetchUserInfo(this.accessToken);
         }
 
@@ -120,8 +120,8 @@ export class GoogleAuthManager {
             const data = await response.json();
             if (data.given_name || data.name) {
                 const name = data.given_name || data.name.split(' ')[0];
-                localStorage.setItem('cashflow_user_name', name);
-                localStorage.setItem('cashflow_user_email', data.email);
+                localStorage.setItem('mangos_user_name', name);
+                localStorage.setItem('mangos_user_email', data.email);
                 console.log(`👤 Usuario obtenido: ${name} (${data.email})`);
                 if (window.app) window.app._updateGreeting();
             }
@@ -188,10 +188,10 @@ export class GoogleAuthManager {
                 });
             }
 
-            localStorage.removeItem('cashflow_access_token');
-            localStorage.removeItem('cashflow_token_expiry');
-            localStorage.removeItem('cashflow_user_email');
-            localStorage.removeItem('cashflow_user_name');
+            localStorage.removeItem('mangos_access_token');
+            localStorage.removeItem('mangos_token_expiry');
+            localStorage.removeItem('mangos_user_email');
+            localStorage.removeItem('mangos_user_name');
 
             this.accessToken = null;
             this.tokenExpiry = null;
@@ -232,7 +232,7 @@ export class GoogleAuthManager {
     }
 
     getUserEmail() {
-        return localStorage.getItem('cashflow_user_email') || 'Usuario';
+        return localStorage.getItem('mangos_user_email') || 'Usuario';
     }
 }
 
@@ -252,9 +252,6 @@ export async function initializeAuth() {
             console.log('⚠️ OAuth2 inicializado, pero usuario no autenticado - mostrando botón');
         }
         updateAuthUI();
-
-        // Refresh icons after UI update
-        if (window.lucide) lucide.createIcons();
     } else {
         console.error('❌ Error inicializando OAuth2');
         // No mostramos toast ya que es esperado si no está configurado aún
