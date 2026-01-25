@@ -403,26 +403,16 @@ class mangosApp {
 
         const greetings = [
             '¿Cuántos gastaste?',
-            '¿Qué compraste? ¿Precio?',
-            'Mirá, te diste el gusto y está perfecto.',
-            'Che, decime cuánto fue y lo sumo.',
-            'Tranqui, lo sumamos a la lista y listo.'
+            'Decime cuántos y lo sumamos.',
+            '¿Qué gastos sumamos?',
+            'Pasame los gastos y los sumamos.',
         ];
 
         typeText('greetingText', pick(greetings), 15);
 
         if (!greetingEl) return;
 
-        const hour = new Date().getHours();
         let greeting = 'Hola';
-
-        if (hour >= 5 && hour < 12) {
-            greeting = 'Buen día';
-        } else if (hour >= 12 && hour < 20) {
-            greeting = 'Buenas tardes';
-        } else {
-            greeting = 'Buenas noches';
-        }
 
         if (name && name !== 'Hola') {
             greetingEl.textContent = `${greeting}, ${name}`;
