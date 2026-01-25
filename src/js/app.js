@@ -75,6 +75,7 @@ class mangosApp {
     _setupEventListeners() {
         // Unified Input Button - Tap vs Long-Press
         const unifiedBtn = document.getElementById('unifiedInputBtn');
+        const voiceHint = document.getElementById('voiceHint');
 
         // Touch events for mobile
         unifiedBtn.addEventListener('touchstart', (e) => this._handlePressStart(e));
@@ -137,6 +138,7 @@ class mangosApp {
         this.longPressTimer = setTimeout(() => {
             this.isLongPress = true;
             this._startVoiceRecording();
+            voiceHint.classList.add('hidden');
         }, this.longPressThreshold);
     }
 
@@ -153,6 +155,7 @@ class mangosApp {
         if (this.isLongPress) {
             this._stopVoiceRecording();
             this.isLongPress = false;
+            voiceHint.classList.remove('hidden');
         } else {
             // It was a tap - show text input
             this._showTextInput();
