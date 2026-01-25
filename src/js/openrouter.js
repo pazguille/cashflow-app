@@ -1,10 +1,9 @@
-import { config } from './config.js';
 import { showToast, showSpinner } from './utils.js';
 
 // OpenRouter API Integration
 export class OpenRouterProcessor {
-    constructor() {
-        this.apiKey = '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';
+    constructor(apiKey) {
+        this.apiKey = apiKey;
         this.model = 'google/gemma-3n-e2b-it:free';
         this.baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
     }

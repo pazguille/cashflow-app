@@ -8,7 +8,8 @@ class Config {
     load() {
         this.sheetId = '';
         this.sheetName = '';
-        this.provider = 'openrouter'; // 'openrouter' or 'gemini'
+        this.apiKey = '';
+        this.provider = 'gemini'; // 'gemini' or 'openrouter'
 
         const stored = localStorage.getItem(this.storageKey);
 
@@ -16,6 +17,7 @@ class Config {
             const data = JSON.parse(stored);
             this.sheetId = data.sheetId || '';
             this.sheetName = data.sheetName || '';
+            this.apiKey = data.apiKey || '';
         }
     }
 
@@ -23,6 +25,7 @@ class Config {
         const data = {
             sheetId: this.sheetId,
             sheetName: this.sheetName,
+            apiKey: this.apiKey
         };
         localStorage.setItem(this.storageKey, JSON.stringify(data));
     }

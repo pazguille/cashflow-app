@@ -3,8 +3,8 @@ import { showToast, showSpinner } from './utils.js';
 
 // Gemini API Integration
 export class GeminiProcessor {
-    constructor() {
-        this.apiKey = '';
+    constructor(apiKey) {
+        this.apiKey = apiKey;
         this.model = 'gemini-2.5-flash-lite';
         this.baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent`;
     }

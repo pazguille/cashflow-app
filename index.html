@@ -12,7 +12,6 @@
     <!-- Performance Optimization: Preloads -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- <link rel="preload" href="https://unpkg.com/lucide@0.562.0/dist/umd/lucide.min.js" as="script"> -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600&display=swap" as="style">
     <link rel="modulepreload" href="./src/js/app.js">
     <link rel="modulepreload" href="./src/js/config.js">
@@ -162,6 +161,10 @@
                     <label>Nombre de Hoja</label>
                     <input type="text" id="sheetName" required>
                 </div>
+                <div class="form-field">
+                    <label>Gemini API Key</label>
+                    <input type="text" id="apiKey" placeholder="AIz...">
+                </div>
                 <div style="margin-top: 32px;">
                     <button type="submit" class="btn-neo">
                         <span class="btn-text">Guardar</span>
@@ -173,9 +176,6 @@
     </div>
 
     <div id="toast" class="toast-neo"></div>
-
-    <!-- Icons -->
-    <!-- <script src="https://unpkg.com/lucide@0.562.0/dist/umd/lucide.min.js"></script> -->
 
     <!-- Core Scripts -->
     <!-- SVG Filter for Gooey Effect -->

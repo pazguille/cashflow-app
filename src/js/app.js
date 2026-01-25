@@ -354,6 +354,7 @@ class mangosApp {
             document.getElementById('sheetUrl').value = `https://docs.google.com/spreadsheets/d/${config.sheetId}/edit`;
         }
         document.getElementById('sheetName').value = config.sheetName;
+        document.getElementById('apiKey').value = config.apiKey;
 
         modal.classList.add('active');
     }
@@ -362,6 +363,7 @@ class mangosApp {
     _saveSettings() {
         const sheetUrl = document.getElementById('sheetUrl').value.trim();
         const sheetName = document.getElementById('sheetName').value.trim();
+        const apiKey = document.getElementById('apiKey').value.trim();
 
         // Extract ID from URL
         // Patterns: /spreadsheets/d/ID/edit, /spreadsheets/d/ID
@@ -377,6 +379,7 @@ class mangosApp {
         }
 
         config.sheetName = sheetName;
+        config.apiKey = apiKey;
         config.save();
 
         document.getElementById('settingsModal').classList.remove('active');
