@@ -48,3 +48,50 @@ export function showSpinner(show) {
         lastClickedBtn = null;
     }
 }
+
+
+
+export function pick(arr, options) {
+
+  if (!Array.isArray(arr)) {
+    throw new Error('shuffle.pick() expect an array as parameter.');
+  }
+
+  options = options || {};
+
+  var rng = options.rng || Math.random,
+      picks = options.picks || 1;
+
+  if (typeof picks === 'number' && picks !== 1) {
+    var len = arr.length,
+        collection = arr.slice(),
+        random = [],
+        index;
+
+    while (picks && len) {
+      index = Math.floor(rng() * len);
+      random.push(collection[index]);
+      collection.splice(index, 1);
+      len -= 1;
+      picks -= 1;
+    }
+
+    return random;
+  }
+
+  return arr[Math.floor(rng() * arr.length)];
+};
+
+export function typeText(id, text, speed) {
+  let i = 0;
+  const el = document.getElementById(id);
+  el.textContent = '';
+  function loop() {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(loop, speed);
+    }
+  }
+  loop();
+}

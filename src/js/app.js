@@ -4,7 +4,7 @@ import { getGeminiProcessor } from './gemini.js';
 import { getOpenRouterProcessor } from './openrouter.js';
 import { getSheetsManager } from './sheets.js';
 import { voiceRecorder, initVoiceRecorder } from './voice.js';
-import { showToast, showSpinner } from './utils.js';
+import { showToast, pick, typeText } from './utils.js';
 import { PullToRefresh } from './pull-to-refresh.js';
 
 // Main Application Logic
@@ -397,6 +397,16 @@ class mangosApp {
     _updateGreeting() {
         const name = localStorage.getItem('mangos_user_name');
         const greetingEl = document.getElementById('userGreeting');
+
+        const greetings = [
+            '¿Cuántos gastaste?',
+            '¿Qué compraste? ¿Precio?',
+            'Mirá, te diste el gusto y está perfecto.',
+            'Che, decime cuánto fue y lo sumo.',
+            'Tranqui, lo sumamos a la lista y listo.'
+        ];
+
+        typeText('greetingText', pick(greetings), 15);
 
         if (!greetingEl) return;
 
